@@ -1,0 +1,20 @@
+# Cloudflare Pages headers
+/*
+  X-Content-Type-Options: nosniff
+  Permissions-Policy: camera=(self), microphone=(self)
+# Model / library mirrors and Scratch assets never change → cache hard
+/cdn/*
+  Cache-Control: public, max-age=31536000, immutable
+/models/*
+  Cache-Control: public, max-age=31536000, immutable
+/static/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+/user-models/*
+  Cache-Control: public, max-age=3600
+# App bundle: let the browser revalidate so updates show up
+/index.html
+  Cache-Control: no-cache
+/lib.min.js
+  Cache-Control: no-cache
+/chunks/*
+  Cache-Control: no-cache

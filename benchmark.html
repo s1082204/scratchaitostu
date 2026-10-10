@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>效能檢測 — Scratch3 + AI 教育版</title>
+<style>
+  :root { color-scheme: light; }
+  body {
+    font-family: "Microsoft JhengHei", "Noto Sans TC", system-ui, sans-serif;
+    line-height: 1.7; color: #222; background: #f7f9fc; margin: 0; padding: 32px;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; background: #fff;
+    border: 1px solid #e2e8f0; border-radius: 12px; padding: 32px 40px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.05); }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  .sub { color: #667085; font-size: 14px; margin-bottom: 20px; }
+  h2 { font-size: 17px; margin: 26px 0 8px; padding-bottom: 6px; border-bottom: 2px solid #eef2f7; }
+  .note { background: #fffaf0; border: 1px solid #ffe8c2; border-radius: 8px;
+    padding: 12px 16px; margin: 14px 0; font-size: 14px; }
+  button { font: inherit; font-size: 15px; padding: 9px 20px; border-radius: 8px;
+    border: 1px solid #cfd8e3; background: #fff; color: #1d3557; cursor: pointer; margin-right: 8px; }
+  button:hover:not(:disabled) { background: #f0f6ff; border-color: #9dc2f0; }
+  button:disabled { opacity: .45; cursor: default; }
+  button.primary { background: #1d6fd6; border-color: #1d6fd6; color: #fff; }
+  button.primary:hover:not(:disabled) { background: #1760bd; }
+  #steps { list-style: none; padding: 0; margin: 14px 0 0; font-size: 14px; }
+  #steps li { padding: 3px 0 3px 24px; position: relative; color: #667085; }
+  #steps li::before { content: "✓"; position: absolute; left: 4px; color: #2e9e5b; }
+  #steps li.active { color: #1d3557; font-weight: 600; }
+  #steps li.active::before { content: "▸"; color: #1d6fd6; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 8px 0; }
+  td, th { border: 1px solid #e6e9ee; padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: #f3f6fa; }
+  td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.dim, .dim { color: #98a2b3; font-size: 13px; }
+  table.env td:first-child { width: 150px; background: #fafbfd; }
+  .pill { display: inline-block; border-radius: 20px; padding: 1px 10px; font-size: 13px; }
+  .pill.good { background: #e6f7ed; color: #1b7f45; }
+  .pill.ok   { background: #eef6ff; color: #1d6fd6; }
+  .pill.warn { background: #fff5e5; color: #b26a00; }
+  .pill.bad  { background: #fdecec; color: #c0392b; }
+  .pill.skip { background: #f0f2f5; color: #98a2b3; }
+  .card { display: flex; align-items: center; gap: 26px; padding: 20px 26px; margin: 8px 0 4px;
+    border-radius: 12px; border: 2px solid #e6e9ee; background: #fafbfd; }
+  .card-block { text-align: center; min-width: 92px; }
+  .card .tier-letter { font-size: 50px; font-weight: 700; line-height: 1; }
+  .card .index-value { font-size: 50px; font-weight: 700; line-height: 1; color: #344054;
+    font-variant-numeric: tabular-nums; }
+  .card .card-caption { font-size: 13px; color: #667085; margin-top: 6px; white-space: nowrap; }
+  .card-meaning { font-size: 14px; color: #344054; border-left: 2px solid #e2e8f0; padding-left: 22px; }
+  .tier-reason { font-size: 14px; color: #667085; margin: 2px 0 0; }
+  .tier-A { border-color: #8fd6ab; background: #f2fbf6; } .tier-A .tier-letter { color: #1b7f45; }
+  .tier-B { border-color: #9dc2f0; background: #f4f9ff; } .tier-B .tier-letter { color: #1d6fd6; }
+  .tier-C { border-color: #f0cf8f; background: #fffbf3; } .tier-C .tier-letter { color: #b26a00; }
+  .tier-D { border-color: #f0a9a9; background: #fef5f5; } .tier-D .tier-letter { color: #c0392b; }
+  table.legend td:nth-child(2) { white-space: nowrap; width: 62px; }
+  td.tier-cell { width: 44px; text-align: center; font-weight: 700; font-size: 17px; }
+  td.tier-cell.tier-A { background: #f2fbf6; color: #1b7f45; }
+  td.tier-cell.tier-B { background: #f4f9ff; color: #1d6fd6; }
+  td.tier-cell.tier-C { background: #fffbf3; color: #b26a00; }
+  td.tier-cell.tier-D { background: #fef5f5; color: #c0392b; }
+  table.legend tr.active td { background: #fffbe6; box-shadow: inset 0 0 0 9999px rgba(255,214,0,.12); }
+  table.legend tr.active td:first-child::after { content: " ◀"; font-size: 12px; }
+  .plan-summary { font-size: 16px; font-weight: 600; line-height: 1.8;
+    background: #f4f9ff; border: 1px solid #cfe4ff; border-radius: 8px; padding: 14px 18px; margin: 8px 0; }
+  ul.flags li { color: #c0392b; }
+  ul.notes li { color: #667085; font-size: 14px; }
+  #error { color: #c0392b; }
+  footer { color: #98a2b3; font-size: 13px; margin-top: 28px; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>效能檢測</h1>
+  <div class="sub" id="subtitle">量這台電腦跑得動哪些 AI 模組</div>
+
+  <div class="note">
+    檢測會實際載入並執行三個 AI 模型，約需 <b>20～90 秒</b>（機器越慢越久），過程中畫面會有點卡，屬正常現象。<br>
+    為了讓分數準確，<b>檢測期間請不要切換視窗或操作其他程式</b>。全程不會開啟攝影機。
+  </div>
+
+  <h2>等級說明</h2>
+  <div id="legend"></div>
+
+  <p>
+    <button id="start" class="primary">開始檢測</button>
+    <button id="camera" disabled>順便檢測攝影機</button>
+    <button id="copy" disabled>複製結果</button>
+    <button id="download" disabled>下載報告</button>
+  </p>
+
+  <ul id="steps"></ul>
+  <p id="error"></p>
+  <div id="results"></div>
+
+  <footer>在主畫面按 <b>F2</b> 可隨時開啟本頁 · 按 <b>F1</b> 為授權與致謝</footer>
+</div>
+
+<script>
+    // 主程序實測的真實記憶體（GB），經網址參數傳入——瀏覽器端的
+    // navigator.deviceMemory 被 Chromium 量化且上限 8，無法檢查 16GB 規格。
+    (function () {
+        var mem = Number(new URLSearchParams(location.search).get('mem'));
+        if (isFinite(mem) && mem > 0) window.__totalMemGb = mem;
+    }());
+</script>
+<script src="cdn/stretch3/ml5-library/ml5.min.js"></script>
+<script src="benchmark-score.js"></script>
+<script src="benchmark-scene.js"></script>
+<script src="benchmark-device.js"></script>
+<script src="benchmark-probe.js"></script>
+<script src="benchmark-report.js"></script>
+<script>
+(function () {
+    'use strict';
+    var version = new URLSearchParams(location.search).get('v') || '(未知版本)';
+    var startButton = document.getElementById('start');
+    var cameraButton = document.getElementById('camera');
+    var copyButton = document.getElementById('copy');
+    var downloadButton = document.getElementById('download');
+    var stepsList = document.getElementById('steps');
+    var errorLine = document.getElementById('error');
+    var results = document.getElementById('results');
+    var legend = document.getElementById('legend');
+    var lastRun = null;
+
+    document.getElementById('subtitle').textContent =
+        '量這台電腦跑得動哪些 AI 模組 · 版本 ' + version;
+
+    // 檢測前就把等級說明擺出來，檢測後再回來標記這台落在哪一級。
+    BenchmarkReport.renderLegend(legend, BenchmarkScore.TIERS, null);
+
+    function addStep(text) {
+        var previous = stepsList.querySelector('li.active');
+        if (previous) previous.classList.remove('active');
+        var item = document.createElement('li');
+        item.className = 'active';
+        item.textContent = text;
+        stepsList.appendChild(item);
+    }
+
+    function finishSteps() {
+        var active = stepsList.querySelector('li.active');
+        if (active) active.classList.remove('active');
+    }
+
+    function redraw() {
+        BenchmarkReport.render(results, lastRun.grade, lastRun.detail, lastRun.meta);
+        BenchmarkReport.renderLegend(legend, BenchmarkScore.TIERS, lastRun.grade.tier);
+    }
+
+    function start() {
+        startButton.disabled = true;
+        cameraButton.disabled = true;
+        copyButton.disabled = true;
+        downloadButton.disabled = true;
+        stepsList.innerHTML = '';
+        errorLine.textContent = '';
+        results.innerHTML = '';
+        lastRun = null;
+        BenchmarkReport.renderLegend(legend, BenchmarkScore.TIERS, null);
+
+        return BenchmarkProbe.runBenchmark(addStep).then(function (outcome) {
+            finishSteps();
+            lastRun = {
+                grade: BenchmarkScore.gradeMachine(outcome.measurements),
+                detail: outcome.detail,
+                meta: { version: version, camera: null, tiers: BenchmarkScore.TIERS },
+            };
+            redraw();
+            copyButton.disabled = false;
+            downloadButton.disabled = false;
+            cameraButton.disabled = false;
+            startButton.textContent = '重新檢測';
+            return lastRun;
+        }).catch(function (error) {
+            finishSteps();
+            errorLine.textContent = '檢測失敗：' + ((error && error.message) || error);
+            throw error;
+        }).finally(function () {
+            startButton.disabled = false;
+        });
+    }
+
+    startButton.addEventListener('click', function () { start().catch(function () {}); });
+
+    cameraButton.addEventListener('click', function () {
+        cameraButton.disabled = true;
+        addStep('檢測攝影機');
+        BenchmarkDevice.probeCamera().then(function (camera) {
+            finishSteps();
+            lastRun.meta.camera = camera;
+            redraw();
+        }).finally(function () { cameraButton.disabled = false; });
+    });
+
+    copyButton.addEventListener('click', function () {
+        var text = BenchmarkReport.asPlainText(lastRun.grade, lastRun.detail, lastRun.meta);
+        BenchmarkReport.copyToClipboard(text).then(function () {
+            copyButton.textContent = '已複製 ✓';
+            setTimeout(function () { copyButton.textContent = '複製結果'; }, 1800);
+        });
+    });
+
+    downloadButton.addEventListener('click', function () {
+        BenchmarkReport.downloadText(
+            BenchmarkReport.asPlainText(lastRun.grade, lastRun.detail, lastRun.meta));
+    });
+
+    // 供自動化驗證使用。
+    window.__benchmark = { start: start, result: function () { return lastRun; } };
+}());
+</script>
+</body>
+</html>

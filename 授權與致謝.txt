@@ -1,0 +1,74 @@
+================================================================
+Scratch3 + AI 教育版（離線版）— 授權與致謝 (License & Credits)
+================================================================
+
+本軟體參考 Scratch 3.0 與 Stretch3 之開源專案重新編譯而成，
+供教育教學與競賽之非商業用途使用。
+
+本軟體為「非官方的修改版本」，與 Scratch 基金會 (Scratch Foundation)、
+MIT、以及 Stretch3 之作者均無隸屬或背書關係。
+
+在軟體執行時，可按 F1 開啟此授權聲明頁面。
+
+
+────────────────────────────────────────────────────────────
+一、範例素材（角色／造型／背景／音效）— 創用 CC BY-SA 2.0
+────────────────────────────────────────────────────────────
+本軟體內建的範例角色、造型、背景與音效素材來自 Scratch，
+由 Scratch 基金會 (Scratch Foundation) 製作，依
+「創用 CC 姓名標示－相同方式分享 2.0 (CC BY-SA 2.0)」授權。
+
+  來源：     https://scratch.mit.edu
+  授權全文： https://creativecommons.org/licenses/by-sa/2.0/
+
+這些素材僅為「離線使用」而重新封裝、內容未經修改；
+依「相同方式分享 (ShareAlike)」條款，這些素材於本軟體中
+仍以 CC BY-SA 2.0 釋出。
+
+
+────────────────────────────────────────────────────────────
+二、程式原始碼之授權
+────────────────────────────────────────────────────────────
+‧ Scratch GUI / Scratch VM
+    © 2016 Massachusetts Institute of Technology
+    BSD 3-Clause License
+    https://github.com/scratchfoundation/scratch-gui
+
+‧ Scratch Blocks
+    Apache License 2.0
+
+‧ Stretch3 AI 擴充模組
+    ml2scratch / facemesh2scratch / handpose2scratch / stretch3
+    作者：Junya Ishihara (champierre) 等
+    授權：GNU Affero General Public License v3 (AGPL-3.0)
+    https://github.com/champierre/ml2scratch
+    https://github.com/champierre/facemesh2scratch
+    https://github.com/champierre/handpose2scratch
+    https://github.com/champierre/stretch3
+
+‧ ml5.js ............ MIT License
+‧ TensorFlow.js ..... Apache License 2.0
+‧ Electron .......... MIT License
+‧ Chromium .......... BSD 等（見發布檔內 LICENSES.chromium.html）
+
+
+────────────────────────────────────────────────────────────
+三、原始碼提供（AGPL-3.0 義務）
+────────────────────────────────────────────────────────────
+由於本軟體包含 AGPL-3.0 授權之元件（Stretch3 AI 擴充），
+依 AGPL-3.0，本軟體之「完整對應原始碼」（含本版本所做之全部修改）
+隨附於本發布資料夾中的「原始碼」子資料夾，並同樣以 AGPL-3.0 釋出。
+
+  AGPL-3.0 授權全文：https://www.gnu.org/licenses/agpl-3.0.html
+
+
+────────────────────────────────────────────────────────────
+四、商標聲明
+────────────────────────────────────────────────────────────
+「Scratch」名稱與貓咪標誌為 Scratch 基金會 (Scratch Foundation) 之商標。
+本軟體為非官方之修改版本，未經其授權或背書。
+
+
+────────────────────────────────────────────────────────────
+編譯用途：全國貓咪盃競賽 (https://proj.moe.edu.tw/cat/Default.aspx) 教學與競賽使用
+================================================================

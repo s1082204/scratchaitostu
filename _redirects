@@ -1,0 +1,3 @@
+# Safety net: legacy Scratch asset URL shape → bundled asset file (200 = rewrite)
+/static/internalapi/asset/:md5/get/  /static/assets/:md5  200
+/static/internalapi/asset/:md5/get   /static/assets/:md5  200
