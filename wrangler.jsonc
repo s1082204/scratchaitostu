@@ -1,0 +1,10 @@
+{
+  // Cloudflare Workers 靜態網站設定：只上傳 site/ 內的檔案（不含 .git、README）
+  "name": "scratchaitostu",
+  "compatibility_date": "2026-10-06",
+  "assets": {
+    "directory": "./site",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  }
+}
